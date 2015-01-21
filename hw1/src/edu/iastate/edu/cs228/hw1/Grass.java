@@ -1,0 +1,57 @@
+package edu.iastate.edu.cs228.hw1;
+
+
+/**
+ * Grass remains if more than rabbits in the neighborhood;
+ * otherwise, it is eaten. 
+ *
+ * @author Ian Malerich
+ */
+public class Grass extends Living 
+{
+	public Grass(World w, int r, int c) 
+	{
+		super(w, r, c);
+	}
+	
+	public State who()
+	{
+		return State.GRASS; 
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "G";
+	}
+	
+	/**
+	 * Grass can be eaten out by rabbits in the neighborhood. 
+	 */
+	public Living next(World wNew)
+	{
+		// See Living.java for an outline of the function. 
+		// See the project description for the survival rules for grass. 
+		Living l;
+		
+		// add age and get the population to be used for this step of the simulation
+		int pop[] = new int[5];
+		census(pop);
+		
+		if (pop[ State.RABBIT.ordinal() ] >= pop[ State.GRASS.ordinal() ]*2) {
+			// there are at least twice as many rabbits as grass
+			l = new Empty(wNew, row, column);
+			
+		} else if (pop[ State.RABBIT.ordinal() ] > pop[ State.GRASS.ordinal() ]) {
+			// there are more rabbits than grass
+			l = new Rabbit(wNew, row, column, 0);
+			
+		} else {
+			// remain as grass
+			l = new Grass(wNew, row, column);
+			
+		}
+		
+		return l; 
+	}
+}
