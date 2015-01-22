@@ -46,8 +46,8 @@ public class PredatorPrey
 		System.out.println("keys: 1 (random world) 2 (file input) 3 (exit)");
 	
 		int trial = 0;
-		while (!gameover) 
-		{ 
+		while (!gameover) { 
+			System.out.println();
 			runTrial(++trial);
 		}
 	}
@@ -60,31 +60,16 @@ public class PredatorPrey
 	 */
 	private static void runTrial(int trial) throws FileNotFoundException
 	{
-		System.out.println();
-		
 		int cycles = 0;
 		World current = generateWorld(trial);
-		if (current == null) {
-			gameover = true;
-			return;
-		}
-		
 		World next = new World(current.getWidth());
 		cycles = promptNumCycles();
-		if (cycles == -1) {
-			gameover = true;
-			return;
-		}
 
 		System.out.println("\nInitial World:\n");
 		System.out.println(current.toString());
 		
-		// update every cycle
 		for (int i=0; i<cycles; i++) {
-			// will overwrite next
 			updateWorld(current, next);
-			
-			// next now holds the current state
 			current = next;
 		}
 		
@@ -106,8 +91,10 @@ public class PredatorPrey
 		case 1:
 			System.out.println("Random World");
 			int width = promptWidth();
-			if (width == -1) {
-				// invalid option received, exit
+			if (width <= 0) {
+				System.err.println("Invalid dimmensions offered for grid width.");
+				System.err.println("Error...");
+				System.exit(0);
 				return null;
 			}
 
@@ -120,6 +107,7 @@ public class PredatorPrey
 			return promptFile();
 
 		default:
+			System.exit(0);
 			return null;
 		}
 	}
@@ -145,6 +133,7 @@ public class PredatorPrey
 		if (ret < 1 || ret > 3) {
 			System.err.println("Error - Invalid option.");
 			System.err.println("Exiting...");
+			System.exit(-1);
 		}
 		
 		return ret;
@@ -166,6 +155,7 @@ public class PredatorPrey
 		
 		System.err.println("Invalid option entered.");
 		System.err.println("Exiting...");
+		System.exit(-1);
 		return -1;
 	}
 	
@@ -196,11 +186,14 @@ public class PredatorPrey
 		
 		Scanner s = new Scanner(System.in);
 		if (s.hasNextInt()) {
-			return s.nextInt();
+			int i = s.nextInt();
+			if (i > 0)
+				return i;
 		}
 		
 		System.err.println("Invalid option entered.");
 		System.err.println("Exiting...");
+		System.exit(-1);
 		return -1;
 	}
 }
