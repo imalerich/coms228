@@ -13,6 +13,11 @@ import java.util.Scanner;
 public class PredatorPrey 
 {
 	/**
+	 * True when the user wishes to exit, otherwise false.
+	 */
+	private static boolean gameover = false;
+	
+	/**
 	 * Update the new world from the old world in one cycle.
 	 * @param wOld
 	 *  The old world to be updated.
@@ -41,31 +46,34 @@ public class PredatorPrey
 		System.out.println("keys: 1 (random world) 2 (file input) 3 (exit)");
 	
 		int trial = 0;
-		while (runTrial(++trial)) { }
+		while (!gameover) 
+		{ 
+			runTrial(++trial);
+		}
 	}
 	
 	/**
 	 * Run a single trial of a simulation.
-	 * @param Trial
+	 * @param trial
 	 *  The trial number.
-	 * @return
-	 *  Whether to exit after this trial.
 	 * @throws FileNotFoundException
 	 */
-	private static boolean runTrial(int Trial) throws FileNotFoundException
+	private static void runTrial(int trial) throws FileNotFoundException
 	{
 		System.out.println();
 		
 		int cycles = 0;
-		World current = generateWorld(Trial);
+		World current = generateWorld(trial);
 		if (current == null) {
-			return false;
+			gameover = true;
+			return;
 		}
 		
 		World next = new World(current.getWidth());
 		cycles = promptNumCycles();
 		if (cycles == -1) {
-			return false;
+			gameover = true;
+			return;
 		}
 
 		System.out.println("\nInitial World:\n");
@@ -82,21 +90,19 @@ public class PredatorPrey
 		
 		System.out.println("\nFinal World:\n");
 		System.out.println(current.toString());
-		
-		return true;
 	}
 	
 	/**
 	 * Generate the world to be used for a trial from user input.
-	 * @param Trial
+	 * @param trial
 	 *  The trial number to be used.
 	 * @return
 	 *  The generated world.
 	 */
-	private static World generateWorld(int Trial) throws FileNotFoundException
+	private static World generateWorld(int trial) throws FileNotFoundException
 	{
 		// load the world from the selected option
-		switch ( prompt(Trial) ) {
+		switch ( prompt(trial) ) {
 		case 1:
 			System.out.println("Random World");
 			int width = promptWidth();
@@ -120,14 +126,14 @@ public class PredatorPrey
 	
 	/**
 	 * Prompt the user for a selection on how to generate the world.
-	 * @param Trial
+	 * @param trial
 	 *  The trial number to prompt for.
 	 * @return
 	 *  The users selection.
 	 */
-	private static int prompt(int Trial)
+	private static int prompt(int trial)
 	{
-		System.out.print("Trial " + Trial + ": ");
+		System.out.print("Trial " + trial + ": ");
 		Scanner s = new Scanner(System.in);
 		int ret = 0;
 		

@@ -120,28 +120,28 @@ public class World
 	
 	/**
 	 * Creates an instance of living based on a key.
-	 * @param Key
+	 * @param key
 	 *  0 - Badger, 1 - Fox, 2 - Rabbit, 3 - Grass, Default - Empty
 	 * @return
 	 *  The created living object.
 	 */
-	private Living initLiving(int Key, int R, int C)
+	private Living initLiving(int key, int r, int c)
 	{
-		switch (Key) {
+		switch (key) {
 		case Living.BADGER:
-			return new Badger(this, R, C, 0);
+			return new Badger(this, r, c, 0);
 			
 		case Living.FOX:
-			return new Fox(this, R, C, 0);
+			return new Fox(this, r, c, 0);
 			
 		case Living.RABBIT:
-			return new Rabbit(this, R, C, 0);
+			return new Rabbit(this, r, c, 0);
 			
 		case Living.GRASS:
-			return new Grass(this, R, C);
+			return new Grass(this, r, c);
 			
 		default:
-			return new Empty(this, R, C);
+			return new Empty(this, r, c);
 		}
 	}
 	
