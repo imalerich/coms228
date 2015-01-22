@@ -7,14 +7,21 @@ package edu.iastate.edu.cs228.hw1;
  */
 public class Badger extends Living 
 {
+	/**
+	 * The age of the badger.
+	 */
 	private int age; 
 	
 	/**
-	 * Constructor 
-	 * @param w: world
-	 * @param r: row position 
-	 * @param c: column position
-	 * @param a: age 
+	 * Create a new badger object in the specified world.
+	 * @param w
+	 *  The world in which to create this object.
+	 * @param r
+	 *  The row in which this object lies.
+	 * @param c
+	 *  The column in which this object lies.
+	 * @param a
+	 *  The age of this object at init.
 	 */
 	public Badger(World w, int r, int c, int a) 
 	{
@@ -22,9 +29,7 @@ public class Badger extends Living
 		age = a;
 	}
 	
-	/**
-	 * A badger occupies the square. 	 
-	 */
+	@Override
 	public State who()
 	{
 		return State.BADGER; 
@@ -36,11 +41,7 @@ public class Badger extends Living
 		return "B";
 	}
 	
-	/**
-	 * A badger dies of old age or hunger, or from an attack by a group of foxes when alone. 
-	 * @param wNew  world of the next cycle
-	 * @return Living  life form occupying the square in the next cycle. 
-	 */
+	@Override
 	public Living next(World wNew)
 	{
 		// See Living.java for an outline of the function. 
@@ -61,7 +62,7 @@ public class Badger extends Living
 			l = new Fox(wNew, row, column, 0);
 			
 		} else if (pop[ State.BADGER.ordinal() ] + pop[ State.FOX.ordinal() ] > pop[ State.RABBIT.ordinal() ]) {
-			// badgers and foxes together out number foxes (die of starvation)
+			// badgers and foxes together out number rabbits (die of starvation)
 			l = new Empty(wNew, row, column);
 			
 		} else {

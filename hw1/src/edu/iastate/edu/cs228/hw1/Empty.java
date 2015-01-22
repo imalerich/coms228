@@ -1,6 +1,5 @@
 package edu.iastate.edu.cs228.hw1;
 
-
 /** 
  * Empty squares are competed by various forms of life.
  * 
@@ -8,6 +7,15 @@ package edu.iastate.edu.cs228.hw1;
  */
 public class Empty extends Living 
 {
+	/**
+	 * Create an empty space in the specified world.
+	 * @param w
+	 *  The world in which to create this object.
+	 * @param r
+	 *  The row in which this object lies.
+	 * @param c
+	 *  The column in which this object lies.
+	 */
 	public Empty(World w, int r, int c) 
 	{
 		super(w, r, c);
@@ -19,17 +27,13 @@ public class Empty extends Living
 		return "E";
 	}
 	
+	@Override
 	public State who()
 	{
 		return State.EMPTY; 
 	}
 	
-	/**
-	 * An empty square will be occupied by Badger, Fox, Rabbit, or Grass, 
-	 * or remain empty. 
-	 * @param wNew  world of the next life cycle.
-	 * @return Living  life form in the next cycle.   
-	 */
+	@Override
 	public Living next(World wNew)
 	{
 		// See Living.java for an outline of the function. 

@@ -1,6 +1,5 @@
 package edu.iastate.edu.cs228.hw1;
 
-
 /**
  * A fox eats rabbits and competes against a badger. 
  * 
@@ -8,14 +7,21 @@ package edu.iastate.edu.cs228.hw1;
  */
 public class Fox extends Living 
 {
+	/**
+	 * The age of the fox.
+	 */
 	private int age; 
 	
 	/**
-	 * Constructor 
-	 * @param w: world
-	 * @param r: row position 
-	 * @param c: column position
-	 * @param a: age 
+	 * Create a new fox object in the specified world.
+	 * @param w
+	 *  The world in which to create the object.
+	 * @param r
+	 *  The row in which this object lies.
+	 * @param c
+	 *  The column in which this object lies.
+	 * @param a
+	 *  The age of this object at time of init.
 	 */
 	public Fox (World w, int r, int c, int a) 
 	{
@@ -29,19 +35,13 @@ public class Fox extends Living
 		return "F";
 	}
 	
-	/**
-	 * A fox occupies the square. 	 
-	 */
+	@Override
 	public State who()
 	{
 		return State.FOX; 
 	}
 	
-	/**
-	 * A fox dies of old age or hunger or attack by one or more badgers. 
-	 * @param wNew  world of the next cycle
-	 * @return Living  life form occupying the square in the next cycle. 
-	 */
+	@Override
 	public Living next(World wNew)
 	{
 		// See Living.java for an outline of the function. 
@@ -58,7 +58,7 @@ public class Fox extends Living
 			l = new Empty(wNew, row, column);
 			
 		} else if (pop[ State.BADGER.ordinal() ] >= pop[ State.FOX.ordinal() ]) {
-			// there are at least as many badgers as foxes, therefore, dd another badger
+			// there are at least as many badgers as foxes, therefore, add another badger
 			l = new Badger(wNew, row, column, 0);
 			
 		} else if (pop[ State.BADGER.ordinal() ] + pop[ State.FOX.ordinal() ] > pop[ State.RABBIT.ordinal() ]) {

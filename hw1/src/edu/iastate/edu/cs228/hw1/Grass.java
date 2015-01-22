@@ -1,6 +1,5 @@
 package edu.iastate.edu.cs228.hw1;
 
-
 /**
  * Grass remains if more than rabbits in the neighborhood;
  * otherwise, it is eaten. 
@@ -9,11 +8,21 @@ package edu.iastate.edu.cs228.hw1;
  */
 public class Grass extends Living 
 {
+	/**
+	 * Create a grass object.
+	 * @param w
+	 *  The world to create the grass object in.
+	 * @param r
+	 *  The row for this object.
+	 * @param c
+	 *  The column for this object.
+	 */
 	public Grass(World w, int r, int c) 
 	{
 		super(w, r, c);
 	}
 	
+	@Override
 	public State who()
 	{
 		return State.GRASS; 
@@ -25,9 +34,7 @@ public class Grass extends Living
 		return "G";
 	}
 	
-	/**
-	 * Grass can be eaten out by rabbits in the neighborhood. 
-	 */
+	@Override
 	public Living next(World wNew)
 	{
 		// See Living.java for an outline of the function. 

@@ -10,20 +10,18 @@ import java.util.Scanner;
  *
  * @author Ian Malerich
  */
-public class PredatorPrey {
+public class PredatorPrey 
+{
 	/**
-	 * Update the new world from the old world in one cycle. 
-	 * @param wOld  old world
-	 * @param wNew  new world 
+	 * Update the new world from the old world in one cycle.
+	 * @param wOld
+	 *  The old world to be updated.
+	 * @param wNew
+	 *  Where the new world is stored.
 	 */
 	public static void updateWorld(World wOld, World wNew)
 	{
-		// For every life form (i.e., a Living object) in the grid wOld, generate  
-		// a Living object in the grid wNew at the corresponding location such that 
-		// the former life form changes into the latter life form. 
-		// 
-		// Employ the method next() of the Living class. 
-		
+		// update each object in the grid
 		for (int r=0; r<wOld.grid.length; r++) {
 			for (int c=0; c<wOld.grid[0].length; c++) {
 				wOld.grid[r][c].next(wNew);
@@ -47,7 +45,12 @@ public class PredatorPrey {
 	}
 	
 	/**
-	 * Run everything needed to do one simulation.
+	 * Run a single trial of a simulation.
+	 * @param Trial
+	 *  The trial number.
+	 * @return
+	 *  Whether to exit after this trial.
+	 * @throws FileNotFoundException
 	 */
 	private static boolean runTrial(int Trial) throws FileNotFoundException
 	{
@@ -117,6 +120,10 @@ public class PredatorPrey {
 	
 	/**
 	 * Prompt the user for a selection on how to generate the world.
+	 * @param Trial
+	 *  The trial number to prompt for.
+	 * @return
+	 *  The users selection.
 	 */
 	private static int prompt(int Trial)
 	{

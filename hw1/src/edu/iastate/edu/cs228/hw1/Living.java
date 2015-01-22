@@ -61,9 +61,9 @@ public abstract class Living
 		// counts in the array population[] at indices 0, 1, 2, 3, 4, respectively. 
 		Arrays.fill(population, 0);
 		
-		for (int c=Math.max(column-1, 0); c<Math.min(column+1, world.grid[0].length); c++)
+		for (int c=Math.max(column-1, 0); c<=Math.min(column+1, world.grid[0].length-1); c++)
 		{
-			for (int r=Math.max(row-1, 0); r<Math.min(row+1, world.grid.length); r++)
+			for (int r=Math.max(row-1, 0); r<=Math.min(row+1, world.grid.length-1); r++)
 			{
 				population[ world.grid[r][c].who().ordinal() ]++;
 			}

@@ -14,10 +14,16 @@ import java.util.Scanner;
  */
 public class World 
 {
+	/**
+	 * The grid that represents the simulated world.
+	 */
 	public Living[][] grid; 
 	
 	/**
-	 *  Default constructor reads from a file 
+	 * Create a new world using the specified file as input.
+	 * @param inputFileName
+	 *  The input file to be used to create this world.
+	 * @throws FileNotFoundException
 	 */
 	public World(String inputFileName) throws FileNotFoundException
 	{
@@ -77,7 +83,8 @@ public class World
 	
 	/**
 	 * Constructor that builds a w X w grid without initializing it. 
-	 * @param width  the grid 
+	 * @param width  
+	 *  The width to be used for the newly created world.
 	 */
 	public World(int w)
 	{
@@ -106,7 +113,7 @@ public class World
 			for (int c=0; c<grid[0].length; c++) {
 				
 				// the constructors will add each entity to the grid
-				initLiving(rand.nextInt(5), r, c);
+				initLiving(rand.nextInt(Living.NUM_LIFE_FORMS), r, c);
 			}
 		}
 	}
@@ -115,30 +122,28 @@ public class World
 	 * Creates an instance of living based on a key.
 	 * @param Key
 	 *  0 - Badger, 1 - Fox, 2 - Rabbit, 3 - Grass, Default - Empty
-	 * 
 	 * @return
 	 *  The created living object.
 	 */
 	private Living initLiving(int Key, int R, int C)
 	{
 		switch (Key) {
-		case 0:
+		case Living.BADGER:
 			return new Badger(this, R, C, 0);
 			
-		case 1:
+		case Living.FOX:
 			return new Fox(this, R, C, 0);
 			
-		case 2:
+		case Living.RABBIT:
 			return new Rabbit(this, R, C, 0);
 			
-		case 3:
+		case Living.GRASS:
 			return new Grass(this, R, C);
 			
 		default:
 			return new Empty(this, R, C);
 		}
 	}
-	
 	
 	/**
 	 * Write the world grid as a string according to the output format.

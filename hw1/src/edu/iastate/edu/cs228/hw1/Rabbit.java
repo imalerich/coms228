@@ -1,6 +1,5 @@
 package edu.iastate.edu.cs228.hw1;
 
-
 /***
  * A rabbit eats grass and lives no more than three years.
  * 
@@ -8,14 +7,21 @@ package edu.iastate.edu.cs228.hw1;
  */
 public class Rabbit extends Living 
 {
+	/**
+	 * The age of the rabbit.
+	 */
 	private int age; 
 	
 	/**
-	 * Creates a Rabbit object.
-	 * @param w: world  
-	 * @param r: row position 
-	 * @param c: column position
-	 * @param a: age 
+	 * Create a new rabbit object in the specified student.
+	 * @param w
+	 *  The world to add this object into.
+	 * @param r
+	 *  The row where this object lies.
+	 * @param c
+	 *  The column where this object lies.
+	 * @param a
+	 *  The age of this object at time of init.
 	 */
 	public Rabbit(World w, int r, int c, int a) 
 	{
@@ -23,7 +29,7 @@ public class Rabbit extends Living
 		age = a;
 	}
 	
-	// Rabbit occupies the square.
+	@Override
 	public State who()
 	{
 		return State.RABBIT; 
@@ -35,11 +41,7 @@ public class Rabbit extends Living
 		return "R";
 	}
 	
-	/**
-	 * A rabbit dies of old age or hunger, or it is eaten by a badger or a fox. 
-	 * @param wNew  world of the next cycle 
-	 * @return Living  new life form occupying the same square
-	 */
+	@Override
 	public Living next(World wNew)
 	{
 		// See Living.java for an outline of the function. 
@@ -48,7 +50,7 @@ public class Rabbit extends Living
 		
 		// add age and get the population to be used for this step of the simulation
 		age++;
-		int pop[] = new int[5];
+		int pop[] = new int[Living.NUM_LIFE_FORMS];
 		census(pop);
 		
 		if (age == 3) {
