@@ -1,4 +1,3 @@
-3
 E B G
 B R F
 R G F

@@ -50,7 +50,7 @@ public class Badger extends Living
 		
 		// add age and get the population to be used for this step of the simulation
 		age++;
-		int pop[] = new int[5];
+		int pop[] = new int[Living.NUM_LIFE_FORMS];
 		census(pop);
 		
 		if (age == 4) {

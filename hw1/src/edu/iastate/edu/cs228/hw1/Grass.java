@@ -42,7 +42,7 @@ public class Grass extends Living
 		Living l;
 		
 		// add age and get the population to be used for this step of the simulation
-		int pop[] = new int[5];
+		int pop[] = new int[Living.NUM_LIFE_FORMS];
 		census(pop);
 		
 		if (pop[ State.RABBIT.ordinal() ] >= pop[ State.GRASS.ordinal() ]*2) {

@@ -19,6 +19,26 @@ public class World
 	 */
 	public Living[][] grid; 
 	
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (obj == null || !(obj instanceof World))
+			return false;
+		
+		World w = (World)obj;
+		if (w.getWidth() != getWidth())
+			return false;
+		
+		for (int r=0; r<getWidth(); r++) {
+			for (int c=0; c<getWidth(); c++) {
+				if (grid[r][c].who() != w.grid[r][c].who())
+					return false;
+			}
+		}
+		
+		return true;
+	}
+	
 	/**
 	 * Create a new world using the specified file as input.
 	 * @param inputFileName
@@ -30,17 +50,41 @@ public class World
 		File f = new File(inputFileName);
 		Scanner s = new Scanner(f);
 		
-		int w = s.nextInt();
-		s.nextLine();
+		// get the size and the data of the first row
+		String first = s.nextLine();
+		int w = findWidth(first);
 		grid = new Living[w][w];
+		procRow(first, 0);
 		
-		int row = 0;
+		int row = 1;
 		while (s.hasNextLine()) {
 			procRow(s.nextLine(), row);
 			row++;
 		}
 		
 		s.close();
+	}
+	
+	/**
+	 * Take a line from of input, count the letters.
+	 * then use that as the width for this world.
+	 * @param data
+	 * 	A sample line from the input file.
+	 * @return
+	 *  The width for the world.
+	 */
+	private int findWidth(String data)
+	{
+		Scanner s = new Scanner(data);
+		
+		int c = 0;
+		while (s.hasNext()) {
+			s.next();
+			c++;
+		}
+		
+		s.close();
+		return c;
 	}
 	
 	/**
@@ -177,7 +221,7 @@ public class World
 	{
 		File f = new File(outputFileName);
 		PrintWriter p = new PrintWriter(f);
-		p.print(toString());
+		p.println(toString());
 		p.close();
 	}			
 }

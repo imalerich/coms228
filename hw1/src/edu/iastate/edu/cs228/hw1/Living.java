@@ -40,7 +40,7 @@ public abstract class Living
 	 * @param c
 	 *  The column position for this entity.
 	 */
-	public Living(World w, int r, int c)
+	protected Living(World w, int r, int c)
 	{
 		world = w;
 		row = r;
@@ -48,7 +48,6 @@ public abstract class Living
 		
 		w.grid[r][c] = this;
 	}
-	
 	
 	/**
 	 * Censuses all life forms in the 3 X 3 neighborhood in a world. 
@@ -61,9 +60,9 @@ public abstract class Living
 		// counts in the array population[] at indices 0, 1, 2, 3, 4, respectively. 
 		Arrays.fill(population, 0);
 		
-		for (int c=Math.max(column-1, 0); c<=Math.min(column+1, world.grid[0].length-1); c++)
+		for (int c=Math.max(column-1, 0); c<=Math.min(column+1, world.getWidth()-1); c++)
 		{
-			for (int r=Math.max(row-1, 0); r<=Math.min(row+1, world.grid.length-1); r++)
+			for (int r=Math.max(row-1, 0); r<=Math.min(row+1, world.getWidth()-1); r++)
 			{
 				population[ world.grid[r][c].who().ordinal() ]++;
 			}

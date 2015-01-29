@@ -41,7 +41,7 @@ public class Empty extends Living
 		Living l;
 		
 		// add age and get the population to be used for this step of the simulation
-		int pop[] = new int[5];
+		int pop[] = new int[Living.NUM_LIFE_FORMS];
 		census(pop);
 		
 		if (pop[ State.RABBIT.ordinal() ] > 1) {
@@ -56,7 +56,7 @@ public class Empty extends Living
 			// more than one neighboring badger
 			l = new Badger(wNew, row, column, 0);
 			
-		} else if (pop[ State.GRASS.ordinal() ] >= 1) {
+		} else if (pop[ State.GRASS.ordinal() ] > 0) {
 			// at least one neighboring grass
 			l = new Grass(wNew, row, column);
 			

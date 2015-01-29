@@ -1,4 +1,0 @@
-3
-R G B
-B G R
-F E R

@@ -70,7 +70,10 @@ public class PredatorPrey
 		
 		for (int i=0; i<cycles; i++) {
 			updateWorld(current, next);
+			
+			World tmp = current;
 			current = next;
+			next = tmp;
 		}
 		
 		System.out.println("\nFinal World:\n");
