@@ -49,7 +49,6 @@ public class Fox extends Living
 		Living l;
 		
 		// add age and get the population to be used for this step of the simulation
-		age++;
 		int pop[] = new int[Living.NUM_LIFE_FORMS];
 		census(pop);
 		
@@ -67,7 +66,7 @@ public class Fox extends Living
 			
 		} else {
 			// live on
-			l = new Fox(wNew, row, column, age);
+			l = new Fox(wNew, row, column, age+1);
 			
 		}
 		

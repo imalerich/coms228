@@ -19,11 +19,11 @@ public class FoxTest
 	public void testAge() throws FileNotFoundException
 	{
 		w = new World("data/fox/age.txt");
-		w.grid[1][1] = new Fox(w, 1, 1, 4);
+		w.grid[1][1] = new Fox(w, 1, 1, 5);
 		n = new World(w.getWidth());
 		PredatorPrey.updateWorld(w, n);
 		
-		Assert.assertEquals("A Fox of age 4 should be Empty after one world udpate.", Empty.class, n.grid[1][1].getClass());
+		Assert.assertEquals("A Fox of age 5 should be Empty after one world udpate.", Empty.class, n.grid[1][1].getClass());
 	}
 	
 	@Test

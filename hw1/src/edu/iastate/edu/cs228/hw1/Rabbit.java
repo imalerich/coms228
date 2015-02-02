@@ -49,7 +49,6 @@ public class Rabbit extends Living
 		Living l;
 		
 		// add age and get the population to be used for this step of the simulation
-		age++;
 		int pop[] = new int[Living.NUM_LIFE_FORMS];
 		census(pop);
 		
@@ -66,7 +65,7 @@ public class Rabbit extends Living
 			l = new Empty(wNew, row, column);
 			
 		} else {
-			l = new Rabbit(wNew, row, column, age);
+			l = new Rabbit(wNew, row, column, age+1);
 		}
 		
 		return l; 

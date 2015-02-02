@@ -19,11 +19,11 @@ public class BadgerTest
 	public void testBadgerAge() throws FileNotFoundException
 	{
 		w = new World("data/badger/age.txt");
-		w.grid[1][1] = new Badger(w, 1, 1, 3);
+		w.grid[1][1] = new Badger(w, 1, 1, 4);
 		n = new World(w.getWidth());
 		PredatorPrey.updateWorld(w, n);
 		
-		Assert.assertEquals("A badger of age 3 should be Empty after one world udpate.", Empty.class, n.grid[1][1].getClass());
+		Assert.assertEquals("A Badger of age 4 should be Empty after one world udpate.", Empty.class, n.grid[1][1].getClass());
 	}
 	
 	@Test

@@ -19,11 +19,11 @@ public class RabbitTest
 	public void testAge() throws FileNotFoundException
 	{
 		w = new World("data/rabbit/age.txt");
-		w.grid[1][1] = new Rabbit(w, 1, 1, 2);
+		w.grid[1][1] = new Rabbit(w, 1, 1, 3);
 		n = new World(w.getWidth());
 		PredatorPrey.updateWorld(w, n);
 		
-		Assert.assertEquals("Rabbit should die of old age, and now be empty.", Empty.class, n.grid[1][1].getClass());
+		Assert.assertEquals("A Rabbit of age 3 should be Empty after one world udpate.", Empty.class, n.grid[1][1].getClass());
 	}
 	
 	@Test
