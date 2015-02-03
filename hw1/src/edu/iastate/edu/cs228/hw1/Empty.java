@@ -44,19 +44,19 @@ public class Empty extends Living
 		int pop[] = new int[Living.NUM_LIFE_FORMS];
 		census(pop);
 		
-		if (pop[ State.RABBIT.ordinal() ] > 1) {
+		if (pop[RABBIT] > 1) {
 			// more than one neighboring rabbit
 			l = new Rabbit(wNew, row, column, 0);
 			
-		} else if (pop[ State.FOX.ordinal() ] > 1) {
+		} else if (pop[FOX] > 1) {
 			// more than one neighboring fox
 			l = new Fox(wNew, row, column, 0);
 			
-		} else if (pop[ State.BADGER.ordinal() ] > 1) {
+		} else if (pop[BADGER] > 1) {
 			// more than one neighboring badger
 			l = new Badger(wNew, row, column, 0);
 			
-		} else if (pop[ State.GRASS.ordinal() ] > 0) {
+		} else if (pop[GRASS] > 0) {
 			// at least one neighboring grass
 			l = new Grass(wNew, row, column);
 			

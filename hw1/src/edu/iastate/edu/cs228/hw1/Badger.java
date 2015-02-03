@@ -56,11 +56,11 @@ public class Badger extends Living
 			// if the age of the badger is equal to 4
 			l = new Empty(wNew, row, column);
 			
-		} else if (pop[ State.BADGER.ordinal() ] == 1 && pop[ State.FOX.ordinal() ] > 1) {
+		} else if (pop[BADGER] == 1 && pop[FOX] > 1) {
 			// if there is only one badger and more than one fox
 			l = new Fox(wNew, row, column, 0);
 			
-		} else if (pop[ State.BADGER.ordinal() ] + pop[ State.FOX.ordinal() ] > pop[ State.RABBIT.ordinal() ]) {
+		} else if (pop[BADGER] + pop[FOX] > pop[RABBIT]) {
 			// badgers and foxes together out number rabbits (die of starvation)
 			l = new Empty(wNew, row, column);
 			

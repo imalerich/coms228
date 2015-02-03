@@ -56,11 +56,11 @@ public class Rabbit extends Living
 			// the rabbit dies of old age
 			l = new Empty(wNew, row, column);
 			
-		} else if (pop[ State.GRASS.ordinal() ] == 0) {
+		} else if (pop[GRASS] == 0) {
 			// there is no grass, die of hunger
 			l = new Empty(wNew, row, column);
 			
-		} else if (pop[ State.BADGER.ordinal() ] + pop[ State.FOX.ordinal() ] >= pop[ State.RABBIT.ordinal() ]) {
+		} else if (pop[BADGER] + pop[FOX] >= pop[RABBIT]) {
 			// there are at least as many badgers and foxes as there are rabbits
 			l = new Empty(wNew, row, column);
 			

@@ -45,11 +45,11 @@ public class Grass extends Living
 		int pop[] = new int[Living.NUM_LIFE_FORMS];
 		census(pop);
 		
-		if (pop[ State.RABBIT.ordinal() ] >= pop[ State.GRASS.ordinal() ]*2) {
+		if (pop[RABBIT] >= pop[GRASS]*2) {
 			// there are at least twice as many rabbits as grass
 			l = new Empty(wNew, row, column);
 			
-		} else if (pop[ State.RABBIT.ordinal() ] > pop[ State.GRASS.ordinal() ]) {
+		} else if (pop[RABBIT] > pop[GRASS]) {
 			// there are more rabbits than grass
 			l = new Rabbit(wNew, row, column, 0);
 			

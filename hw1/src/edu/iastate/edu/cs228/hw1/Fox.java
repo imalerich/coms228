@@ -56,11 +56,11 @@ public class Fox extends Living
 			// the fox dies of old age
 			l = new Empty(wNew, row, column);
 			
-		} else if (pop[ State.BADGER.ordinal() ] >= pop[ State.FOX.ordinal() ]) {
+		} else if (pop[BADGER] >= pop[FOX]) {
 			// there are at least as many badgers as foxes, therefore, add another badger
 			l = new Badger(wNew, row, column, 0);
 			
-		} else if (pop[ State.BADGER.ordinal() ] + pop[ State.FOX.ordinal() ] > pop[ State.RABBIT.ordinal() ]) {
+		} else if (pop[BADGER] + pop[FOX] > pop[RABBIT]) {
 			// badgers and foxes together out number foxes (die of starvation)
 			l = new Empty(wNew, row, column);
 			
