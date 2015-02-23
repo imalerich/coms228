@@ -121,7 +121,8 @@ public class OrderStatistics
 	 */
 	private static int partition(int[] arr, int first, int last)
 	{
-		// sort the array around the last element
+		// pick a random pivot, and set it to the last position
+		swap(arr, first + (int)(Math.random() * (last-first+1)), last);
 		int p = arr[last];
 		int i = first-1;
 		
