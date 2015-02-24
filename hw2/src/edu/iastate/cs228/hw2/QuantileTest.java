@@ -12,14 +12,41 @@ public class QuantileTest
 {
 	private Quantiles q;
 	
+	
+	/**
+	 * Test the quick constructor of the Quantiles class.
+	 */
+	@Test
+	public void testQuick()
+	{
+		// initialize the array with no doubles
+		int[] arr = new int[99999];
+		for (int i=0; i<arr.length; i++)
+			arr[i] = i+1;
+		OrderTest.shuffle(arr);
+		
+		q = new Quantiles(arr, 4, true);
+		String actual = q.toString();
+		
+		q = new Quantiles(arr, 4, false);
+		String expected = q.toString();
+		
+		System.out.println("Expected:\t" + expected);
+		System.out.println("Actual:\t\t" + actual);
+		Assert.assertTrue("Outputs should be equal", expected.equals(actual));
+	}
+	
+	/**
+	 * Test the get methods of the Quantiles class.
+	 */
 	@Test
 	public void testGet()
 	{
 		int[] arr = { 15, 17, 9, 35, 23, 2, 11, 18, 5, 6 };
 		
 		// test with 4-quantiles
-		q = new Quantiles(arr, 4);
-		Assert.assertEquals("Expected 4 quantiles.", 4, q.getQ());
+		q = new Quantiles(arr, 4, true);
+		Assert.assertEquals("Expected 3 quantiles.", 3, q.getQ());
 		Assert.assertEquals("Expected array size is 10.", 10, q.size());
 		Assert.assertEquals("1st quartile should be 6", 6, q.getQuantile(1));
 		Assert.assertEquals("2nd quartile should be 11", 11, q.getQuantile(2));
@@ -29,8 +56,8 @@ public class QuantileTest
 		Assert.assertTrue("Unexpected ineqRatio.", Math.abs(4.46153f-q.ineqRatio())<0.00001f);
 		
 		// test with 3-quantiles
-		q = new Quantiles(arr, 3);
-		Assert.assertEquals("Expected 3 quantiles.", 3, q.getQ());
+		q = new Quantiles(arr, 3, true);
+		Assert.assertEquals("Expected 2 quantiles.", 2, q.getQ());
 		Assert.assertEquals("Expected array size is 10.", 10, q.size());
 		Assert.assertEquals("1st 3-quantile should be 9", 9, q.getQuantile(1));
 		Assert.assertEquals("2nd 3-quantile should be 17", 17, q.getQuantile(2));
@@ -39,26 +66,32 @@ public class QuantileTest
 		Assert.assertTrue("Unexpected ineqRatio.", Math.abs(3.45454545f - q.ineqRatio()) < 0.00001f);
 	}
 	
+	/**
+	 * Test the String output of the Quantiles class.
+	 */
 	@Test
 	public void testOutput()
 	{
 		String expected;
 		int[] arr = { 15, 17, 9, 35, 23, 2, 11, 18, 5, 6 };
 		
-		q = new Quantiles(arr, 4);
+		q = new Quantiles(arr, 4, true);
 		expected = "10, 4, [6, 11, 18], 58, 13\n";
 		Assert.assertTrue("Error - Output strings do not match.", expected.equals(q.toString()));
 		
-		q = new Quantiles(arr, 3);
+		q = new Quantiles(arr, 3, true);
 		expected = "10, 3, [9, 17], 76, 22\n";
 		Assert.assertTrue("Error - Ouput strings do not match.", expected.equals(q.toString()));
 	}
 	
+	/**
+	 * Test the quantileQuery method.
+	 */
 	@Test
 	public void testQuery()
 	{
 		int[] arr = { 15, 17, 9, 35, 23, 2, 11, 18, 5, 6 };
-		q = new Quantiles(arr, 4);
+		q = new Quantiles(arr, 4, true);
 		
 		Assert.assertEquals("Expected quantile is I", 1, q.quantileQuery(2));
 		Assert.assertEquals("Expected quantile is I", 1, q.quantileQuery(6));

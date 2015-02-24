@@ -50,8 +50,8 @@ public class OrderStatistics
 	 * - The rightmost boundary of the subarray (inclusive)
 	 * @param i
 	 * - The requested order statistic to find
-	 * @return - The ith order statistic in the subarray
-	 * 
+	 * @return 
+	 * - The ith order statistic in the subarray
 	 * @throws IllegalArgumentException
 	 * - If i < 1 or i > n
 	 */
@@ -118,9 +118,14 @@ public class OrderStatistics
 	 * 	Inclusive end of the array subset.
 	 * @return
 	 * 	The separation point for the arrays.k
+	 * @throws IllegalArgumentException
+	 * 	Throws an exception if either first or last is negative, or first is > than last.
 	 */
 	private static int partition(int[] arr, int first, int last)
 	{
+		if (first > last || first < 0 || last < 0)
+			throw new IllegalArgumentException("Invalid First: " + first + " or Last: " + last + " argumnent.");
+		
 		// pick a random pivot, and set it to the last position
 		swap(arr, first + (int)(Math.random() * (last-first+1)), last);
 		int p = arr[last];

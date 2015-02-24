@@ -39,6 +39,63 @@ public class Quantiles
     	}
 	}
 	
+     /**
+      * The expected time complexity of this method must be
+      * O(n log q), where n = data.length, where n = data.length (for this, you
+      * must implement the method such as the one outlined in Section 2.2.
+      * 
+      * @param data
+      *  The integers to be split into q-quantiles.
+      * @param q
+      *	 The number of q-quantiles to create.
+      */
+	private void quickInit(int[] data, int q)
+	{
+		//set the class data
+		this.q = q;
+		n = data.length;
+		
+		// create the new quantile array
+		quantiles = new int[q-1];
+		quickSelect(data, 0, data.length-1, q, 0);
+	}
+	
+	/**
+	 * Finds the median of the data set, then recurses down to find the other
+	 * quantiles by spliting the array in half.
+	 * @param data
+	 * 	Data input array to be parsed.
+	 * @param first
+	 * 	Starting index [inclusive] for the array subset to be parsed.
+	 * @param last
+	 * 	Ending index [inclusive] for the array subset to be parsed.
+	 * @param q
+	 * 	Local quantile count, relative to the array subset.
+	 * @param kstart
+	 * 	Used as an offset for the quickstart array when recursing.
+	 * 	Root call will have this value at 0.
+	 */
+	private void quickSelect(int[] data, int first, int last, int q, int kstart)
+	{
+		int n = last-first+1;
+		int k = (int)Math.ceil((q-1)/2f);
+    	int c = (int)Math.ceil((k) * (float)n/q);
+    	
+    	quantiles[kstart + k-1] = OrderStatistics.select(data, first, last, c);
+    	
+    	// parse left subset
+    	if (k > 1) {
+    		int low = (int)Math.ceil(k * (float)n/q) - 1;
+    		quickSelect(data, first, first+low, k, kstart);
+    	}
+    	
+    	// parse right subset
+    	if (k < q-1) {
+    		int high = n - (int)Math.ceil(k * (float)n/q);
+    		quickSelect(data, last-high+1, last, q-k, kstart + k);
+    	}
+	}
+	
 	/**
 	 * Calculates topTotal and botTotal from the input data set.
 	 * 
@@ -70,12 +127,12 @@ public class Quantiles
      * - The number of q-quantiles to create
      * 
      * @throws IllegalArgumentException
-     * - If q < 1 or if q > n
+     * - If q <= 1 or if q > n
      */
     public Quantiles(int[] data, int q) 
     {
     	// test for an illegal argument
-    	if (q < 1 || q > data.length)
+    	if (q <= 1 || q > data.length)
     		throw new IllegalArgumentException();
     	
     	init(data, q);
@@ -122,14 +179,22 @@ public class Quantiles
      * - Flag to request a O(n log q) construction
      * 
      * @throws IllegalArgumentException
-     * - If q < 1 or if q > n
+     * - If q <= 1 or if q > n
      */
     public Quantiles(int[] data, int q, boolean fast) 
     {
-        // TODO
-    	
-    	if (q < 1 || q > data.length)
+    	// test for an illegal argument
+    	if (q <= 1 || q > data.length)
     		throw new IllegalArgumentException();
+    	
+    	// initialize the data using the normal algorithm
+    	if (!fast)
+    		init(data, q);
+    	else
+    		quickInit(data, q);
+    	
+    	// calculate the top and bottom totals
+    	getTotals(data);
     }
 
     /**
@@ -145,7 +210,7 @@ public class Quantiles
      */
     public int getQuantile(int k) 
     {
-    	if (k < 1 || k > q)
+    	if (k < 1 || k >= q)
     		throw new IllegalArgumentException();
     	
         return quantiles[k-1];
@@ -155,11 +220,12 @@ public class Quantiles
      * Returns the number of quantiles in this object. This method must take
      * O(1) time in the worst case.
      * 
-     * @return - The number of quantiles in this object
+     * @return 
+     * - The number of quantiles in this object
      */
     public int getQ() 
     {
-        return q;
+        return q-1;
     }
 
     /**
@@ -180,7 +246,8 @@ public class Quantiles
      * 
      * @param x
      * - The item to find the quantile of
-     * @return - The quantile containing x as described above
+     * @return 
+     * - The quantile containing x as described above
      */
     public int quantileQuery(int x) 
     {
@@ -249,7 +316,7 @@ public class Quantiles
     
     /**
      * Searches for which quantile x exists in, using a binary search pattern.
-     * This should execute at a worst case of O(log(n)).
+     * This should execute at a worst case of O(log(k)).
      * 
      * @param x
      * 	The input we want the quantile for.

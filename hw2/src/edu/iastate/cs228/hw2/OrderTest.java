@@ -13,6 +13,9 @@ import org.junit.Test;
  */
 public class OrderTest 
 {
+	/**
+	 * Test the OrderStatistics Selection method.
+	 */
 	@Test
 	public void testSelectMed()
 	{
@@ -29,6 +32,9 @@ public class OrderTest
 		Assert.assertEquals("Maximum value should be 35.", 35, res);
 	}
 	
+	/**
+	 * Test selection on the minimum array size.
+	 */
 	@Test
 	public void testSelectMin()
 	{
@@ -39,6 +45,9 @@ public class OrderTest
 		Assert.assertEquals("Minimum value should be 6.", 6, res);
 	}
 	
+	/**
+	 * Test selection on a small array.
+	 */
 	@Test
 	public void testSelectSmall()
 	{
@@ -55,6 +64,9 @@ public class OrderTest
 		Assert.assertEquals("Maximum value should be 14.", 14, res);
 	}
 	
+	/**
+	 * Test selection methods on a large array.
+	 */
 	@Test
 	public void testSelectLarge()
 	{
@@ -89,6 +101,9 @@ public class OrderTest
 		Assert.assertEquals("678th smallest value should be " + sorted[677], sorted[677], res);
 	}
 	
+	/**
+	 * Test selection methods on a very large array.
+	 */
 	@Test
 	public void testSelectVeryLarge()
 	{
@@ -131,7 +146,12 @@ public class OrderTest
 		Assert.assertEquals("300th smallest value should be " + sorted[index-1], sorted[index-1], res);
 	}
 	
-	private static void shuffle(int[] arr)
+	/**
+	 * Utility shuffle method for creating a very large random array with no repeating values.
+	 * @param arr
+	 * 	Array to shuffle.
+	 */
+	public static void shuffle(int[] arr)
 	{
 		Random r = new Random(1);
 		for (int i=0; i<arr.length; i++)
