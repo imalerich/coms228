@@ -11,7 +11,24 @@ import org.junit.Test;
 public class QuantileTest 
 {
 	private Quantiles q;
-	
+
+	/**
+	 * Test the extra credit constructor of the Quantiles class.
+	 */
+	@Test
+	public void testFast()
+	{
+		int [] arr = {15, 17, 9, 35, 23, 2, 11, 18, 5, 6};
+		q = new Quantiles(arr,4,true);
+		Assert.assertEquals("Expected 4", 3, q.getQ());
+		Assert.assertEquals("Expected 10", 10, q.size());
+		Assert.assertEquals("Expected 6", 6, q.getQuantile(1));
+		Assert.assertEquals("Expected 11", 11, q.getQuantile(2));
+		Assert.assertEquals("Expected 18", 18, q.getQuantile(3));
+		Assert.assertEquals("Expected 13", 13, q.getBottomTotal());
+		Assert.assertEquals("Expected 58", 58, q.getTopTotal());
+		Assert.assertEquals("Expected 58", 3, q.getQ());
+	}
 	
 	/**
 	 * Test the quick constructor of the Quantiles class.
@@ -20,15 +37,16 @@ public class QuantileTest
 	public void testQuick()
 	{
 		// initialize the array with no doubles
-		int[] arr = new int[99999];
+		int[] arr = new int[100];
 		for (int i=0; i<arr.length; i++)
 			arr[i] = i+1;
 		OrderTest.shuffle(arr);
+		int qsize = 6;
 		
-		q = new Quantiles(arr, 4, true);
+		q = new Quantiles(arr, qsize, true);
 		String actual = q.toString();
 		
-		q = new Quantiles(arr, 4, false);
+		q = new Quantiles(arr, qsize, false);
 		String expected = q.toString();
 		
 		System.out.println("Expected:\t" + expected);
