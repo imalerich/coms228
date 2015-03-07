@@ -1,18 +1,15 @@
 package edu.iastate.cs228.hw3;
 
-import java.io.FileNotFoundException; 
-import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Comparator;
+import java.util.Scanner;
 
 /**
- * IMPORTANT: In the case of any minor discrepancy between the comments before a method
- * and its description in the file proj3.pdf, use the version from the file. 
- *
- */
-
-
-/**
- * TODO - add class description
+ * Represents the current stock of fruit of a particular grocery store.
+ * 	The stock is represented by two sorted doubly linked lists,
+ * 	one sorting the stock alphabetically by fruit,
+ * 	the other sorting stock alphabetically by bin number.
  * 
  * @author Ian Malerich
  *
@@ -52,9 +49,44 @@ public class DoublySortedList
 	  */
 	 public DoublySortedList(String inventoryFile) throws FileNotFoundException
 	 {
-		 // TODO 
+		 // open the target file
+		 File f = new File(inventoryFile);
+		 Scanner s = new Scanner(f);
+		 while (s.hasNextLine()) {
+			 String line = s.nextLine();
+			 Node next = procLine(line);
+			 
+			 // TODO insert next to the linked list
+		 }
+		 
+		 // close the file
+		 s.close();
 	 }
 	 
+	 /**
+	  * Get the information from the line, and return it as a Node.
+	  * The node will only contain the data represeted by the file:
+	  * 	Fruit	Quantity	Bin
+	  * And will not contain references to the rest of the linked list.
+	  * 
+	  * @return
+	  * 	The data from the input file, contained in the Node class.
+	  */
+	 private Node procLine(String line) {
+		 Scanner s = new Scanner(line);
+		 String name = s.next();
+		 int quantity = s.nextInt();
+		 int bin = s.nextInt();
+		 
+		 return new Node(name, quantity, bin, null, null, null, null);
+	 }
+	 
+	 /**
+	  * Requests the number of nodes present in the linked lists.
+	  * 
+	  * @return
+	  * 	The number of nodes in the linked list.
+	  */
 	 public int size()
 	 {
 		 return size; 
@@ -87,8 +119,10 @@ public class DoublySortedList
 	  * The case n == 0 should result in no operation.  The case n < 0 results in an 
 	  * exception thrown. 
 	  * 
-	  * @param fruit  name of the fruit to be added 
-	  * @param n	  quantity of the fruit
+	  * @param fruit  
+	  * 	name of the fruit to be added 
+	  * @param n	  
+	  * 	quantity of the fruit
 	  */
 	 public void add(String fruit, int n) throws IllegalArgumentException
 	 {
@@ -177,15 +211,27 @@ public class DoublySortedList
 	 }
 	 
 	 /**
+	  * Request the number of fruit stored in the linked list.
 	  * 
-	  * @param fruit
-	  * @return quantity of the fruit (zero if not on stock)
+	  * @param 
+	  * 	fruit
+	  * @return 
+	  * 	quantity of the fruit (zero if not on stock)
 	  */
      public int inquire(String fruit)
      {
-    	 // TODO 
+    	 Node next = headN;
+    	 do {
+    		 if (next.fruit.equals(fruit)) {
+    			 return next.quantity;
+    		 }
+    		 
+    		 next = next.nextN;
+    		 
+    	 } while (next != headN);
     	 
-    	 return 0;   	 
+    	 // fruit was not found to be in stock
+    	 return 0;
       }
 	 
 	 /**
@@ -202,9 +248,19 @@ public class DoublySortedList
 	 */
 	 public String printInventoryN()
 	 {	 
-		 // TODO 
+		 // print the header
+		 String output	=	"fruit          quantity       bin";
+		 output 		+=	"----------------------------------";
 		 
-		 return null; 
+		 // traverse the linked list by fruit name
+		 Node next = headN;
+		 do {
+			 addNodeDataN(output, next);
+			 next = next.nextN;
+			 
+		 } while (next != headN);
+		 
+		 return output; 
 	 }
 	 
 	 /**
@@ -221,9 +277,51 @@ public class DoublySortedList
 	  */
 	 public String printInventoryB()
 	 {
-		 // TODO 
+		 // print the header
+		 String output	=	"bin            fruit          quantity";
+		 output 		+=	"---------------------------------------";
+		 
+		 // traverse the linked list by bin number
+		 Node next = headB;
+		 do {
+			 addNodeDataB(output, next);
+			 next = next.nextB;
+			 
+		 } while (next != headB);
 		 
 		 return null; 
+	 }
+	 
+	 /**
+	  * Fill out a string with a Node's data, Fruit first.
+	  * 
+	  * @param addTo
+	  * 	The string to add the Node's data to.
+	  * @param withData
+	  * 	The node who's data to use.
+	  */
+	 private void addNodeDataN(String toString, Node withData)
+	 {
+		 // take advantage of the Node's toString method
+		 toString += withData.toString();
+		 toString += '\n';
+	 }
+	 
+	 /**
+	  * Fill out a string with a Node's data, Bin first.
+	  * 
+	  * @param toString
+	  * 	The string to add the Node's data to.
+	  * 
+	  * @param withData
+	  * 	The node who's data to use.
+	  */
+	 private void addNodeDataB(String toString, Node withData)
+	 {
+		 toString += withData.bin		+ new String( new char[15  - (int)Math.log10(withData.bin) + 1] );
+		 toString += withData.fruit		+ new String( new char[15 - withData.fruit.length()] );
+		 toString += withData.quantity	+ new String( new char[4 - (int)Math.log10(withData.quantity) + 1] );
+		 toString += '\n';
 	 }
 	 
 	 @Override
@@ -233,9 +331,7 @@ public class DoublySortedList
 	  */
 	 public String toString()
 	 {
-		 // TODO 
-		 
-		 return null; 
+		 return printInventoryN(); 
 	 }
 	 
 	 /**
@@ -253,7 +349,8 @@ public class DoublySortedList
 	  */
 	 public void clearStorage()
 	 {
-		 // TODO 
+		 headN = null;
+		 headB = null;
 	 }
 	 
 	 /** 
@@ -286,7 +383,31 @@ public class DoublySortedList
 	  */
 	 public void insertionSort(boolean NList, Comparator<Node> comp)
 	 {
-		 // TODO 
+		 // if this is the only element, return, the array is already sorted
+		 if (headN.nextN == headN)
+			 return;
+		 
+		 // the current element we are sorting (do not need to sort the first element
+		 Node next = NList ? headN : headB;
+		 next = NList ? next.nextN : next.nextB;
+		 
+		 // traverse forward for each Node in the list
+		 do {
+			 Node prev = NList ? next.previousN : next.previousB;
+			 
+			 // while the next node is less then the previous node
+			 while (comp.compare(next, prev) < 0) {
+				 if (NList)
+					 swapN(next, prev);
+				 else
+					 swapB(next, prev);
+				 
+				 // next is in the prev position, use the next previous of next
+				 prev = NList ? next.previousN : next.previousB;
+			 }
+			 
+			 next = NList ? next.nextN : next.nextB;
+		 } while (next != (NList ? headN : headB));
 	 }
 	 
 	 /**
@@ -308,18 +429,84 @@ public class DoublySortedList
 	 // helper methods 
 	 // --------------
 	 
+	 /** 
+	  * Swap the position of two nodes in the name list.
+	  * 
+	  * @param first
+	  * 	The first Node to be swapped.
+	  * @param second
+	  * 	The second Node to be swapped.
+	  */
+	 private void swapN(Node first, Node second)
+	 {
+		 // swap the forward pointing reference
+		 Node tmp = first.nextN;
+		 first.nextN = second.nextN;
+		 second.nextN = tmp;
+		 
+		 first.nextN.previousN = first;
+		 second.nextN.previousN = second;
+		 
+		 // swap the backward pointing reference
+		 tmp = first.previousN;
+		 first.previousN = second.previousN;
+		 second.previousN = tmp;
+		 
+		 first.previousN.nextN = first;
+		 second.previousN.nextN = second;
+		 
+	 }
+	 
+	 /**
+	  * Swap the position of two nodes in the bin list.
+	  * 
+	  * @param first
+	  * 	The first Node to be swapped.
+	  * @param second
+	  * 	The second Node to be swapped.
+	  */
+	 private void swapB(Node first, Node second)
+	 {
+		 // swap the forward pointing reference
+		 Node tmp = first.nextB;
+		 first.nextB = second.nextB;
+		 second.nextB = tmp;
+		 
+		 first.nextB.previousB = first;
+		 second.nextB.previousB = second;
+		 
+		 // swap the backward pointing reference
+		 tmp = first.previousB;
+		 first.previousB = second.previousB;
+		 second.previousB = tmp;
+		 
+		 first.previousB.nextB = first;
+		 second.previousB.nextB = second;
+		 
+	 }
+	 
 	 /**
 	  * Add a node between two nodes prev and next in the N-list.   
 	  * Update headN if the added node becomes the first node on the list in the 
 	  * alphabetical order of fruit name. 
 	  * 
 	  * @param node
+	  * 	The inserted node.
 	  * @param prev
+	  * 	The node that will exist AFTER the inserted node, if this is headN, node will now be second.
 	  * @param next
+	  * 	The node that will exist BEFORE the inserted node, if this is headN, node will now be headN.
 	  */
 	 private void insertN(Node node, Node prev, Node next)
 	 {
-		 // TODO 
+		 prev.nextN = node;
+		 node.previousN = prev;
+		 
+		 next.previousN = node;
+		 node.nextN = next;
+		 
+		 // if next was the headN, node is now headN, else, next was never headN
+		 headN = (next == headN) ? node : headN;
 	 }
 	
 	 /**
@@ -328,12 +515,22 @@ public class DoublySortedList
 	  * the order of bin number. 
 	  * 
 	  * @param node
+	  * 	The inserted node.
 	  * @param prev
+	  * 	The node that will exist AFTER the inserted node, if this is headB, node will now be second.
 	  * @param next
+	  * 	THe node that will exist BEFORE the inserted node, if this is headB, node will no be headB.
 	  */
 	 private void insertB(Node node, Node prev, Node next)
-	 {	 
-		 // TODO 
+	 {
+		 prev.nextB = node;
+		 node.previousB = prev;
+		 
+		 next.previousB = node;
+		 node.nextB = next;
+		 
+		 // if next was the headB, node is now headB, else, next was never headB
+		 headB = (next == headB) ? node : headB;
 	 }
 	 
 	 /**
@@ -345,18 +542,65 @@ public class DoublySortedList
 	  */
 	 private void remove(Node node)
 	 {
-		 // TODO 
+		 // if node references itself, it is the only node in the list, clear the entire storage
+		 if (node.nextN == node) {
+			 clearStorage();
+			 
+			 return;
+		 }
+		
+		 // otherwise, link next and prev together, remove the link to node from the list
+		 node.nextN.previousN = node.previousN;
+		 node.previousN.nextN = node.nextN;
+		 
+		 node.nextB.previousB = node.previousB;
+		 node.previousB.nextB = node.nextB;
+		 
+		 // if this node is head, node.next is now head, else, node was never head
+		 headN = (node == headN) ? node.nextN : headN;
+		 headB = (node == headB) ? node.nextB : headB;
 	 }
 	 
 	 /**
+	  * Sorts fruit and bin from first to last so everything before the pivot is smaller than the pivot
+	  * and everything after the pivot is larger, the separation point for the arrays is then returned.
 	  * 
-	  * @param name		name[first, last] is the subarray of fruit names 
-	  * @param bin		bin[first, last] is the subarray of bins storing the fruits.
+	  * @param first	
+	  * 	name[first, last] is the subarray of fruit names 
+	  * @param bin		
+	  * 	bin[first, last] is the subarray of bins storing the fruits.
 	  * @param first
+	  * 	The first index of the subarray [inclusive].
 	  * @param last
+	  * 	The last index of the subarray [inclusive].
 	  */
-	 private void partition(String fruit[], Integer quant[], int first, int last)
+	 private int partition(String fruit[], Integer bin[], int first, int last)
 	 {
-		 // TODO 
+		 if (first > last || first < 0 || last < 0)
+			 throw new IllegalArgumentException("Invalid First: " + first + " or Last: " + last + " argumnent.");
+		 
+		 // pick a random pivot, and set it to the last position
+		 swap(fruit, first + (int)(Math.random() * (last-first+1)), last);
+		 swap(bin, first + (int)(Math.random() * (last-first+1)), last);
+		
+		 // TODO
+		 return 0;
+	 }
+	 
+	 /**
+	  * Swap two elements in an array.
+	  * 
+	  * @param arr
+	  * 	The input array in which the swap will occur.
+	  * @param i0
+	  * 	The first index of the swap.
+	  * @param i1
+	  * 	The second index of the swap.
+	  */
+	 private <T> void swap(T[] arr, int i0, int i1)
+	 {
+		 T tmp = arr[i0];
+		 arr[i0] = arr[i1];
+		 arr[i1] = tmp;
 	 }
 }
