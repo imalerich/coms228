@@ -57,9 +57,9 @@ public class Node
     {
     	String ret;
     	
-    	ret  = fruit	+ new String( new char[15 - fruit.length()] );
-    	ret += quantity	+ new String( new char[15 - (int)Math.log10(quantity) + 1] );
-    	ret += bin		+ new String( new char[4  - (int)Math.log10(bin) + 1] );
+    	ret  = fruit	+ (new String( new char[15 - fruit.length()] )).replace('\0', ' ')
+    					+ quantity	+ (new String( new char[15 - (int)Math.log10(quantity) + 1] )).replace('\0', ' ')
+    					+ bin		+ (new String( new char[4  - (int)Math.log10(bin) + 1] )).replace('\0', ' ');
     	
     	return ret;
     }

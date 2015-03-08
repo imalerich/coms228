@@ -1,0 +1,10 @@
+pear		16	13
+fig			2	5
+lemon		65	3
+kiwi		16	8
+prune		20	11
+pineapple	122	9
+banana 		18	1
+watermelon	156 10
+pomelo		80	12
+grapefruit	10	16

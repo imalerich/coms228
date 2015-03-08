@@ -1,0 +1,6 @@
+apple		22	1
+apricot		2	2
+avacodo		14	3
+blueberry	4	4
+date		16	5
+kiwi		22	6

@@ -1,0 +1,2 @@
+kumqaut		14	1
+nectarine	6	2

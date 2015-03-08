@@ -1,0 +1,5 @@
+cranberry	66	5
+lime		44	3
+grapefruit	22	1
+fig			55	4
+nectarine	33	2
