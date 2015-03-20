@@ -1,0 +1,6 @@
+fruit           quantity        bin
+-----------------------------------
+apple           50              5  
+banana          20              9  
+grape           100             8  
+pear            40              3  

@@ -60,25 +60,36 @@ public class ListTests
 	 * Test the restock method.
 	 */
 	@Test
-	public void testRestock()
+	public void testRestock0()
 	{
 		testList = new DoublySortedList();
-		testList.add("apple", 20);
 		testList.add("banana", 20);
-		
-		Assert.assertEquals("After adding 20 apples, the list should have 20 apples.", 20, testList.inquire("apple"));
-		Assert.assertEquals("After adding 20 bananas, the list should have 20 bananas.", 20, testList.inquire("banana"));
+		testList.add("pear", 20);
 		
 		try {
 			testList.restock("tests/restock0.txt");
 			
-			System.out.println(testList.printInventoryN());
-			System.out.println(testList.printInventoryB());
+			Assert.assertEquals("After restocking 40 pears, expected 60 total pears.", 60, testList.inquire("pear"));
+			Assert.assertEquals("After restocking 100 grapes, expected 100 total grapes.", 100, testList.inquire("grape"));
+			Assert.assertEquals("After restocking 50 apples, expected 50 total apples.", 50, testList.inquire("apple"));
+			Assert.assertEquals("After restocking 20 bananas, expected 40 total bananas.", 40, testList.inquire("banana"));
+		
+		} catch (FileNotFoundException e) {
+			Assert.fail("Could not find the file tests/restock0.txt, are you sure this file exists?");
+			
+		}
+		
+		testList = new DoublySortedList();
+		testList.add("apple", 20);
+		testList.add("banana", 20);
+		
+		try {
+			testList.restock("tests/restock0.txt");
 			
 			Assert.assertEquals("After restocking 40 pears, expected 40 total pears.", 40, testList.inquire("pear"));
 			Assert.assertEquals("After restocking 100 grapes, expected 100 total grapes.", 100, testList.inquire("grape"));
-			Assert.assertEquals("After restocking 20 bananas, expected 40 total bananas.", 40, testList.inquire("banana"));
 			Assert.assertEquals("After restocking 50 apples, expected 70 total apples.", 70, testList.inquire("apple"));
+			Assert.assertEquals("After restocking 20 bananas, expected 40 total bananas.", 40, testList.inquire("banana"));
 		
 		} catch (FileNotFoundException e) {
 			Assert.fail("Could not find the file tests/restock0.txt, are you sure this file exists?");
@@ -318,18 +329,17 @@ public class ListTests
 	 */
 	private void testHeaders(boolean testN, Scanner s)
 	{
-		// TODO - make sure these are formatted correctly
 		if (testN) {
-			String line0 =	"fruit          quantity       bin";
-			String line1 =	"----------------------------------";
+			String line0 =	"fruit           quantity        bin";
+			String line1 =	"-----------------------------------";
 		 
 			Assert.assertTrue("printInventoryN - unexpected results in first line.", line0.equals(s.nextLine()));
 			Assert.assertTrue("printInventoryN - unexpected results in second line.", line1.equals(s.nextLine()));
 		}
 		 
 		 if (!testN) {
-			 String line0 =	"bin            fruit          quantity";
-			 String line1 =	"---------------------------------------";
+			 String line0 =	"bin             fruit           quantity";
+			 String line1 =	"----------------------------------------";
 		 
 			Assert.assertTrue("printInventoryB - unexpected results in first line.", line0.equals(s.nextLine()));
 			Assert.assertTrue("printInventoryB - unexpected results in second line.", line1.equals(s.nextLine()));
