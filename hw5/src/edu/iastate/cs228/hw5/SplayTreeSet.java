@@ -3,6 +3,7 @@ package edu.iastate.cs228.hw5;
 import java.util.AbstractSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Stack;
 
 /**
  *
@@ -58,6 +59,7 @@ public class SplayTreeSet<E extends Comparable<? super E>> extends AbstractSet<E
 	@Override
 	public boolean contains(Object obj)
 	{
+		@SuppressWarnings("unchecked")
 		Node<E> tmp = findEntry((E)obj);
 		if (tmp != null)
 			splay(tmp);
@@ -209,7 +211,7 @@ public class SplayTreeSet<E extends Comparable<? super E>> extends AbstractSet<E
 		else if (getNumChildren(r) == 0)
 			return r;
 		else
-			return findSuccessor(r);
+			return findLeftMost(r);
 	}
 	
 	/**
@@ -221,14 +223,18 @@ public class SplayTreeSet<E extends Comparable<? super E>> extends AbstractSet<E
 	 * 	the left most element of current if no left nodes
 	 * 	returns current
 	 */
-	private Node<E> findSuccessor(Node<E> current)
+	private Node<E> findLeftMost(Node<E> current)
 	{
+		// no element to search
+		if (current == null)
+			return null;
+		
 		// if there are no further elements on the left, return current
 		if (current.getLeft() == null)
 			return current;
 		
 		// otherwise recurse down
-		return findSuccessor(current.getLeft());
+		return findLeftMost(current.getLeft());
 	}
 
 	/**
@@ -282,6 +288,14 @@ public class SplayTreeSet<E extends Comparable<? super E>> extends AbstractSet<E
 		}
 	}
 	
+	/**
+	 * Returns the number of children 0, 1, or 2 of a node.
+	 * 	note: excludes grand-children etc
+	 * @param n
+	 * 	The node to count the children of
+	 * @return
+	 * 	the number of children, either 0, 1, or 2
+	 */
 	private int getNumChildren(Node<E> n)
 	{
 		int c = 0;
@@ -312,8 +326,49 @@ public class SplayTreeSet<E extends Comparable<? super E>> extends AbstractSet<E
 	@Override
 	public String toString()
 	{
-		// TODO
-		return null; 
+		return toString(root, new String(), 0); 
+	}
+	
+	/**
+	 * Constructs a string out of a tree starting at current.
+	 * 
+	 * @param current
+	 * 	The root node of the tree.
+	 * @param appendTo
+	 * 	The string already constructed by currents parents.
+	 * @param depth
+	 * 	The current depth of the tree.
+	 * @return
+	 * 	The completed string.
+	 */
+	private String toString(Node<E> current, String appendTo, int depth)
+	{
+		if (current == null)
+			return (appendTo.length() != 0 ? "\n" : "") + appendTo + "null";
+		
+		String l = (appendTo.length() != 0 ? "\n" : "") + getSpaces(depth*4) + current.getData().toString();
+		if (getNumChildren(current) == 0)
+			// no children, simply return the prev string plus the new string
+			return appendTo + l;
+		else {
+			String left = toString(current.getLeft(), appendTo + l, depth+1);
+			String right = toString(current.getRight(), left, depth+1);
+			
+			return right;
+		}
+	}
+	
+	/**
+	 * Get a string containg count spaces.
+	 * 
+	 * @param count
+	 * 	the number of spaces in the return string
+	 * @return	
+	 * 	the return string
+	 */
+	private String getSpaces(int count)
+	{
+		return new String(new char[count]).replace('\0', ' ');
 	}
 
 	/**
@@ -486,31 +541,49 @@ public class SplayTreeSet<E extends Comparable<? super E>> extends AbstractSet<E
 	 */
 	private class SplayTreeIterator implements Iterator<E>
 	{
+		private Stack<Node<E>> s;
 		Node<E> cursor;
 
 		public SplayTreeIterator()
 		{
-			// TODO
+			// cursor will start at the root, and will recurse down to the left when next() is called
+			cursor = root;
+			s = new Stack<Node<E>>();
 		}
 
 		@Override
 		public boolean hasNext()
 		{
-			// TODO
-			return true; 
+			// there is no more data when we are at the bottom right of the tree (the largest node)
+			return !s.isEmpty() || cursor != null;
 		}
 
 		@Override
 		public E next()
 		{
-			// TODO
-			return null; 
+			// if there is no next element, return an exception
+			if (!hasNext())
+				throw new NoSuchElementException();
+			
+			// find the left most element of the tree
+			while (cursor != null) {
+				s.push(cursor);
+				cursor = cursor.getLeft();
+			}
+			
+			// set the cursor to the right node of the current node on the stack
+			cursor = s.pop();
+			cursor = cursor.getRight();
+			
+			// the data we want is now that nodes parents
+			return cursor.getParent().getData(); 
 		}
 
 		@Override
 		public void remove()
 		{
-			// TODO
+			// remove the cursor from the tree
+			SplayTreeSet.this.remove(cursor);
 		}
 	}
 }
