@@ -10,18 +10,18 @@ package edu.iastate.cs228.hw5;
  */
 public class MapEntry<K extends Comparable<? super K>, V> implements Comparable<MapEntry<K, V>> 
 {
-  public K key;
-  public V value;
-   
-  @Override
-  public int compareTo(MapEntry<K, V> rhs)
-  {
-    return key.compareTo(rhs.key);
-  }
- 
-  public MapEntry(K key, V value)
-  {
-    this.key = key;
-    this.value = value;
-  }
+	public K key;
+	public V value;
+
+	@Override
+	public int compareTo(MapEntry<K, V> rhs)
+	{
+		return key.compareTo(rhs.key);
+	}
+
+	public MapEntry(K key, V value)
+	{
+		this.key = key;
+		this.value = value;
+	}
 }
