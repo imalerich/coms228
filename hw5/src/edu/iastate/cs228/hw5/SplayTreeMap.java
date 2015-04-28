@@ -1,6 +1,7 @@
 package edu.iastate.cs228.hw5;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  *
@@ -23,7 +24,7 @@ public class SplayTreeMap<K extends Comparable<? super K>, V>
 	 */
 	public SplayTreeMap() 
 	{
-		// TODO  
+		entrySet = new SplayTreeSet<MapEntry<K, V>>();
 	}
 
 	/**
@@ -41,8 +42,7 @@ public class SplayTreeMap<K extends Comparable<? super K>, V>
 	 */
 	public int size()
 	{
-		// TODO
-		return 0; 
+		return entrySet.size(); 
 	}
 
 	/**
@@ -53,8 +53,12 @@ public class SplayTreeMap<K extends Comparable<? super K>, V>
 	 */
 	public V get(K key)
 	{
-		// TODO
-		return null; 
+		if (!containsKey(key))
+			return null;
+		
+		// get the node contains this key and returns its data's (MapEntry) value
+		Node<MapEntry<K, V>> n = entrySet.findEntry( new MapEntry<K, V>(key, null));
+		return n.getData().value;
 	}
 
 	/**
@@ -64,8 +68,10 @@ public class SplayTreeMap<K extends Comparable<? super K>, V>
 	 */
 	public boolean containsKey(K key)
 	{
-		// TODO
-		return false; 
+		if (key == null)
+			throw new NullPointerException();
+		
+		return entrySet.contains(key); 
 	}
 
 	/**
@@ -78,8 +84,22 @@ public class SplayTreeMap<K extends Comparable<? super K>, V>
 	 */
 	public V put(K key, V value)
 	{
-		// TODO
-		return null; 
+		if (key == null || value == null)
+			throw new NullPointerException();
+		
+		// if the key is not yet in the map, add it with the supplied data
+		if (!containsKey(key)) {
+			entrySet.add( new MapEntry<K, V>(key, value));
+			
+			return null;
+		}
+		
+		// the key already exists, so we must replace its data and return the old data
+		Node<MapEntry<K, V>> n = entrySet.findEntry( new MapEntry<K, V>(key, null));
+		V v = n.getData().value;
+		n.getData().value = value; // set the new data
+		
+		return v; 
 	}
 
 	/**
@@ -92,8 +112,20 @@ public class SplayTreeMap<K extends Comparable<? super K>, V>
 	 */
 	public V remove(K key)
 	{
-		// TODO
-		return null; 
+		if (key == null)
+			throw new NullPointerException();
+		
+		// if the key is not yet in the map, there is nothing to remove
+		if (!containsKey(key)) {
+			return null;
+		}
+		
+		// tell the set to remove the data by passing in a dummy MapEntry with the input key
+		Node<MapEntry<K, V>> n = entrySet.findEntry( new MapEntry<K, V>(key, null));
+		V v = n.getData().value;
+		entrySet.remove( new MapEntry<K, V>(key, null));
+		
+		return v; 
 	}
 
 	/**
@@ -103,8 +135,14 @@ public class SplayTreeMap<K extends Comparable<? super K>, V>
 	 */
 	public SplayTreeSet<K> keySet()
 	{
-		// TODO
-		return null; 
+		// use an iterator to add all keys from this maps set 
+		SplayTreeSet<K> tmp = new SplayTreeSet<K>();
+		Iterator<MapEntry<K, V>> i = entrySet.iterator();
+		while (i.hasNext()) {
+			tmp.add(i.next().key);
+		}
+		
+		return tmp; 
 	}
 
 	/**
@@ -116,8 +154,14 @@ public class SplayTreeMap<K extends Comparable<? super K>, V>
 	 */
 	public ArrayList<V> values()
 	{
-		// TODO
-		return null;  
+		// use an iterator to add all keys from this maps set 
+		ArrayList<V> tmp = new ArrayList<V>();
+		Iterator<MapEntry<K, V>> i = entrySet.iterator();
+		while (i.hasNext()) {
+			tmp.add(i.next().value);
+		}
+		
+		return tmp;  
 	}
 
 }
