@@ -339,16 +339,13 @@ public class SplayTreeSetTests {
 		s.add(10);
 		s.add(60);
 		s.add(53);
-		System.out.println(s.toString() + "\n");
 		s.add(55);
-		System.out.println(s.toString() + "\n");
 		s.add(25);
-		//System.out.println(s.toString() + "\n");
 		
-		//Integer ans = 30;
-		//Node<Integer> n = s.getRoot();
-		//Integer res = s.successor(n).getData();
-		//assertEquals(ans, res);
+		Integer ans = 30;
+		Node<Integer> n = s.getRoot();
+		Integer res = s.successor(n).getData();
+		assertEquals(ans, res);
 	}
 	
 	// Successor of current node (which has a left subtree)
