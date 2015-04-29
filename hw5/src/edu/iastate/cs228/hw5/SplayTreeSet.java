@@ -193,9 +193,9 @@ public class SplayTreeSet<E extends Comparable<? super E>> extends AbstractSet<E
 		int c = current.getData().compareTo(key);
 		if (c == 0) {
 			return current;
-		} else if (c < 0 && current.getLeft() != null)
+		} else if (c > 0 && current.getLeft() != null)
 			return findEntry(current.getLeft(), key);
-		else if (c > 0 && current.getRight() != null)
+		else if (c < 0 && current.getRight() != null)
 			return findEntry(current.getRight(), key);
 		
 		lastNodeFound = current;
@@ -214,13 +214,36 @@ public class SplayTreeSet<E extends Comparable<? super E>> extends AbstractSet<E
 		if (l == null)
 			return null;
 		else if (getNumChildren(l) == 0)
-			return null;
+			return l;
 		else
 			return findLeftMost(l);
 	}
 	
 	/**
 	 * Finds the right-most node of given node 
+	 * 
+	 * @param current
+	 * 	node to find the right most element of
+	 * @return
+	 * 	the right most element of current 
+	 *  if no right nodes returns current
+	 */
+	private Node<E> findRightMost(Node<E> current)
+	{
+		// no element to search
+		if (current == null)
+			return null;
+		
+		// if there are no further elements on the right, return current
+		if (current.getRight() == null)
+			return current;
+		
+		// otherwise recurse down
+		return findRightMost(current.getRight());
+	}
+	
+	/**
+	 * Finds the left-most node of given node 
 	 * 
 	 * @param current
 	 * 	node to find the left most element of
@@ -281,12 +304,18 @@ public class SplayTreeSet<E extends Comparable<? super E>> extends AbstractSet<E
 			// we are done removing the node
 			return;
 		} else {
-			Node<E> s = successor(n);
+			Node<E> s = n.getLeft();
+			if (s != null)
+				s = findRightMost(s);
+			
 			n.setData(s.getData());
 			
-			// because we are using the left most element of the right tree, s has no left children
-			s.getParent().setLeft(s.getRight()); // s.getRight() can be null
-			s.getRight().setParent(s.getParent()); // s.getRight()'s parent
+			// because we are using the right-most most element of the left tree, s has no right children
+			if (s.getParent() != null)
+				s.getParent().setRight(s.getLeft()); // s.getLeft() can be null
+			
+			if (s.getLeft() != null)
+				s.getLeft().setParent(s.getParent()); // s.getLeft()'s parent
 			
 			// now s is the root of this subset (where n was) so we are done removing the node
 			return;
@@ -417,7 +446,6 @@ public class SplayTreeSet<E extends Comparable<? super E>> extends AbstractSet<E
 	{
 		// performed when current-parent is root
 		Node<E> p = current.getParent();
-		p.setParent(current);
 		root = current;
 		
 		if (current.isLeftChild()) {
@@ -440,6 +468,7 @@ public class SplayTreeSet<E extends Comparable<? super E>> extends AbstractSet<E
 			current.setLeft(p);
 		}
 		
+		p.setParent(current);
 		current.setParent(null);
 	}
 
@@ -449,7 +478,6 @@ public class SplayTreeSet<E extends Comparable<? super E>> extends AbstractSet<E
 	 */
 	protected void zigZig(Node<E> current)
 	{
-		// p is not root and x and p are both left or right children
 		Node<E> p = current.getParent();
 		Node<E> g = p.getParent();
 		Node<E> gg = g.getParent();
@@ -518,42 +546,45 @@ public class SplayTreeSet<E extends Comparable<? super E>> extends AbstractSet<E
 		Node<E> g = p.getParent();
 		Node<E> gg = g.getParent();
 		boolean R = g.isRightChild();
-		
-		Node<E> r = current.getRight();
-		Node<E> l = current.getLeft();
 			
 		if (current.isRightChild() && p.isLeftChild()) {
 			// move currents left and right to under p and g
-			p.setRight(l);
-			if (l != null)
-				l.setParent(p);
-	
-			g.setLeft(r);
-			if (r != null)
-				r.setParent(g);
+			Node<E> b = current.getLeft();
+			Node<E> c = current.getRight();
 			
-			// now set current as the overall parent
+			if (b != null)
+				b.setParent(p);
+			p.setRight(b);
+			
+			if (c != null)
+				c.setParent(g);
+			g.setLeft(c);
+			
 			current.setLeft(p);
 			current.setRight(g);
+			p.setParent(current);
+			g.setParent(current);
+			
 			
 		} else if (current.isLeftChild() && p.isRightChild()) {
 			// move currents left and right to under p and g
-			p.setLeft(r);
-			if (r != null)
-				r.setParent(p);
-	
-			g.setRight(l);
-			if (l != null)
-				l.setParent(p);
+			Node<E> b = current.getLeft();
+			Node<E> c = current.getRight();
 			
-			// now set current as the overall parent
+			if (b != null)
+				b.setParent(g);
+			g.setRight(b);
+			
+			if (c != null)
+				c.setParent(p);
+			p.setLeft(c);
+			
 			current.setLeft(g);
 			current.setRight(p);
+			p.setParent(current);
+			g.setParent(current);
+			
 		}
-		
-		// set p and g's parents to current
-		p.setParent(current);
-		g.setParent(current);
 		
 		// move current to the child of gg (or root if gg does not exist)
 		if (gg == null) {
@@ -578,7 +609,8 @@ public class SplayTreeSet<E extends Comparable<? super E>> extends AbstractSet<E
 	private class SplayTreeIterator implements Iterator<E>
 	{
 		private Stack<Node<E>> s;
-		Node<E> cursor;
+		private Node<E> cursor; // used only for traversal
+		private Node<E> data; // stores the current data of the iterator
 
 		public SplayTreeIterator()
 		{
@@ -608,18 +640,22 @@ public class SplayTreeSet<E extends Comparable<? super E>> extends AbstractSet<E
 			}
 			
 			// set the cursor to the right node of the current node on the stack
-			cursor = s.pop();
-			cursor = cursor.getRight();
+			data = s.pop();
+			cursor = data.getRight();
 			
 			// the data we want is now that nodes parents
-			return cursor.getParent().getData(); 
+			return data.getData(); 
 		}
 
 		@Override
 		public void remove()
 		{
 			// remove the cursor from the tree
-			SplayTreeSet.this.remove(cursor);
+			Node<E> p = data.getParent();
+			SplayTreeSet.this.remove(data.getData());
+			
+			cursor = p.getRight(); // everything to the left has already been checked
+			s.clear();
 		}
 	}
 }
