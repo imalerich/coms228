@@ -67,9 +67,7 @@ public class SplayTreeSetTests {
 		s.add(53);
 		s.add(55);
 		s.add(25);
-		System.out.println(s.toString() + '\n');
 		s.remove(55);
-		System.out.println(s.toString() + '\n');
 		
 		Integer ans = 25;
 		Integer res = s.getRoot().getData();
@@ -108,7 +106,6 @@ public class SplayTreeSetTests {
 		s.add(53);
 		s.add(55);
 		s.add(25);
-		System.out.println(s.toString() + '\n');
 		
 		s.remove(25);
 		Integer ans = 22;
@@ -327,6 +324,8 @@ public class SplayTreeSetTests {
 		s.add(53);
 		s.add(55);
 		s.add(25);
+		
+		System.out.println(s.toString() + '\n');
 		Integer ans = 21;
 		Node<Integer> n = s.getRoot().getLeft(); // Gives 10, the smallest node
 		Integer res = s.successor(n).getData();
@@ -366,6 +365,7 @@ public class SplayTreeSetTests {
 		s.add(53);
 		s.add(55);
 		s.add(25);
+		
 		Integer ans = 25;
 		Node<Integer> n = s.getRoot().getLeft().getRight(); // Gives 22, which only has a left subtree
 		Integer res = s.successor(n).getData();
@@ -404,7 +404,7 @@ public class SplayTreeSetTests {
 		s.add(53);
 		s.add(55);
 		s.add(25);
-		System.out.println(s.toString() + '\n');
+		
 		Integer ans = 50;
 		Node<Integer> n = s.getRoot().getRight().getLeft().getLeft(); // Gives 30, which is a left leaf
 		Integer res = s.successor(n).getData();

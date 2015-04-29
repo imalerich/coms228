@@ -210,13 +210,42 @@ public class SplayTreeSet<E extends Comparable<? super E>> extends AbstractSet<E
 	 */
 	protected Node<E> successor(Node<E> n)
 	{
-		Node<E> l = n.getRight();
-		if (l == null)
-			return null;
-		else if (getNumChildren(l) == 0)
-			return l;
+		// if the n is not a leaf
+		if (getNumChildren(n) > 1) {
+			Node<E> l = n.getRight();
+			if (l == null)
+				return null;
+			else if (getNumChildren(l) == 0)
+				return l;
+			else
+				return findLeftMost(l);
+			
+		} else if (n.isRightChild()) {
+			return findFirstRightChildAncestor(n).getParent();
+			
+		} else { // is left child
+			return findFirstLeftChildAncestor(n).getParent();
+		}
+	}
+	
+	private Node<E> findFirstLeftChildAncestor(Node<E> current)
+	{
+		if (current.getParent() == null)
+			return current;
+		else if (current.getParent().isRightChild())
+			return findFirstLeftChildAncestor(current.getParent());
 		else
-			return findLeftMost(l);
+			return current;
+	}
+	
+	private Node<E> findFirstRightChildAncestor(Node<E> current)
+	{
+		if (current.getParent() == null)
+			return current;
+		else if (current.getParent().isLeftChild())
+			return findFirstRightChildAncestor(current.getParent());
+		else
+			return current;
 	}
 	
 	/**
