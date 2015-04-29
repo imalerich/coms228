@@ -210,42 +210,24 @@ public class SplayTreeSet<E extends Comparable<? super E>> extends AbstractSet<E
 	 */
 	protected Node<E> successor(Node<E> n)
 	{
-		// if the n is not a leaf
-		if (getNumChildren(n) > 1) {
-			Node<E> l = n.getRight();
-			if (l == null)
-				return null;
-			else if (getNumChildren(l) == 0)
-				return l;
-			else
-				return findLeftMost(l);
-			
-		} else if (n.isRightChild()) {
-			return findFirstRightChildAncestor(n).getParent();
-			
-		} else { // is left child
-			return findFirstLeftChildAncestor(n).getParent();
+		// if we can go to the right, get the left most
+		if (n.getRight() != null) {
+			return findLeftMost(n.getRight());
+		} else {
+			return findSuccessorFromAncestors(n);
 		}
 	}
 	
-	private Node<E> findFirstLeftChildAncestor(Node<E> current)
+	private Node<E> findSuccessorFromAncestors(Node<E> current)
 	{
-		if (current.getParent() == null)
-			return current;
-		else if (current.getParent().isRightChild())
-			return findFirstLeftChildAncestor(current.getParent());
-		else
-			return current;
-	}
-	
-	private Node<E> findFirstRightChildAncestor(Node<E> current)
-	{
-		if (current.getParent() == null)
-			return current;
-		else if (current.getParent().isLeftChild())
-			return findFirstRightChildAncestor(current.getParent());
-		else
-			return current;
+		if (current == null)
+			return null;
+		else if (current.isRightChild())
+			return findSuccessorFromAncestors(current.getParent());
+		else if (current.isLeftChild())
+			return current.getParent();
+		
+		return null;
 	}
 	
 	/**
